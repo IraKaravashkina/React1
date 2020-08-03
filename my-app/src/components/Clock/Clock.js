@@ -1,27 +1,35 @@
-import React, {Component} from "react";
+import React, {Component} from 'react';
 
 export default class Clock extends Component {
     constructor(props) {
         super(props);
         this.state = {
             newAge: props.age,
-            date: new Date(props.startData)
+            date: new Date(props.starData)
         }
     }
 
     componentDidMount() {
-        setInterval(() => this.agePlus(), 1000);
-        setInterval( ()=> this.tick(), 1000);
-        this.tick();
+        console.log('componentDidMount');
+        this.intervalID = setInterval(()=> {
+            this.tick();
+            this.agePlus();
+        }, 1000);
+        }
+
+
+
+    componentWillUnmount() {
+        console.log('componentWillUnmount');
+        clearInterval(this.intervalID);
     }
 
     tick() {
         const {date} = this.state;
         const newDate = +date + 1000;
         this.setState({
-            data: new Date(newDate),
+            date: new Date(newDate),
         })
-        console.log(new Date(newDate));
     }
 
     agePlus() {
@@ -30,18 +38,17 @@ export default class Clock extends Component {
         this.setState({
             newAge: newAge + plus,
         })
-    }
-    ;
+    };
 
     render() {
         const {name} = this.props;
-        const {newAge} = this.state;
-        const {date} = this.state;
+        const {newAge, date} = this.state;
         return (
-            <div>
+            <div style={{ border: '1px solid red', margin:20}}>
                 <h1>Hello, {name}!</h1>
-                <h2>New age: {newAge}</h2>
-                <h2>It is {date.toLocaleString()}</h2>
-            </div>)
+                <h2>New age: {newAge} &pi; </h2>
+                <h2>Date: {date.toLocaleString()}</h2>
+            </div>
+        )
     }
 }
